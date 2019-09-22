@@ -1,0 +1,32 @@
+.world{
+  background:goldenrod;
+  width: 100vw;
+  height:100vh;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-1;
+  .hill{
+    position:absolute;
+    top:250px;
+    left:200px;
+  .arc {
+    stroke: #333;
+  }
+  .tomb{
+    width:90px;
+    height:90px;
+    position:absolute;
+    &:nth-child(1){
+      transform: rotate(-21deg);
+      left:170px;
+      top:120px;
+    }
+    &:nth-child(2){
+      transform: rotate(25deg);
+      left:500px;
+      top:150px;
+    }
+  }
+}
+}

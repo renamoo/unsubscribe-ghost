@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -8,13 +8,17 @@ import { Subject } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'unsubscribeしないこだれだ';
-  labels = ['menu1', 'menu2', 'menu3'];
+  labels = [1, 2, 3];
   ghost$ = new Subject();
+  show$ = new Subject<string>();
   stream;
-  active: number;
+  active: number = 1;
+
+  constructor(private render: Renderer2) { }
 
   ngOnInit() {
     this.stream = this.ghost$.asObservable();
+    this.show$.subscribe(x => this.showGhost(x));
   }
 
   onClick(i: number) {
@@ -23,6 +27,37 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onSend() {
     this.ghost$.next();
+  }
+
+  changeActive(i: number) {
+    this.active = i;
+  }
+
+  showGhost(x: string) {
+    const ghost = this.render.createElement('img');
+    this.render.setAttribute(ghost, 'src', `assets/ghost${x}.svg`);
+    this.render.addClass(ghost, 'ghost');
+    this.render.setStyle(ghost, 'left', `${this.getRandomLeft()}px`);
+    this.render.setStyle(ghost, 'top', `${this.getRandomTop()}px`);
+    this.render.appendChild(document.body, ghost);
+  }
+
+  getRandomLeft() {
+    const times = Math.floor(window.innerWidth / 100);
+    let random = 0;
+    for (let i = 0; i < times; i++) {
+      random += Math.random() * 100;
+    }
+    return random;
+  }
+
+  getRandomTop() {
+    const times = Math.floor(window.innerHeight / 100);
+    let random = 0;
+    for (let i = 0; i < times; i++) {
+      random += Math.random() * 100;
+    }
+    return random;
   }
 
   ngOnDestroy() {
